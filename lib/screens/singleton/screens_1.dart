@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_state/models/user.dart';
 import 'package:flutter_state/screens/bloc/user/usuario_cubit.dart';
 import 'package:flutter_state/screens/singleton/screens_2.dart';
 
@@ -9,19 +10,7 @@ class HomeScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<UsuariosCubit, UsuarioState>(
-        builder: (context, state) {
-          print('state: $state');
-
-          if (state is UsuarioInitial) {
-            return const Center(
-              child: Text('No hay usuario'),
-            );
-          } else {
-            return const UserInformacion();
-          }
-        },
-      ),
+      body: const BodyScaffold(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -37,9 +26,46 @@ class HomeScreen1 extends StatelessWidget {
   }
 }
 
-class UserInformacion extends StatelessWidget {
-  const UserInformacion({
+class BodyScaffold extends StatelessWidget {
+  const BodyScaffold({
     Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UsuariosCubit, UsuarioState>(
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case UsuarioInitial:
+            return const Center(
+              child: Text(
+                'No hay información del usuario',
+                style: TextStyle(fontSize: 20),
+              ),
+            );
+            break;
+
+          case UsuarioActivo:
+            return UserInformacion(
+              user: (state as UsuarioActivo).user,
+            );
+            break;
+
+          default:
+            return const Center(
+              child: Text('No hay usuario'),
+            );
+        }
+      },
+    );
+  }
+}
+
+class UserInformacion extends StatelessWidget {
+  User user;
+  UserInformacion({
+    Key? key,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -51,6 +77,15 @@ class UserInformacion extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 30, top: 10),
+            child: Center(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage("https://picsum.photos/200/300"),
+                radius: 50,
+              ),
+            ),
+          ),
           const Text(
             'General Information',
             style: TextStyle(
@@ -59,38 +94,32 @@ class UserInformacion extends StatelessWidget {
             ),
           ),
           const Divider(),
-          const ListTile(
-            title: Text("Name: Duarte"),
+          ListTile(
+            title: Text("Name: ${user.name}",
+                style: const TextStyle(fontSize: 18)),
+          ),
+          ListTile(
+            title: Text("User Name: ${user.userName}",
+                style: const TextStyle(fontSize: 18)),
           ),
           const Text(
             'Profession',
             style: TextStyle(fontSize: 18),
           ),
           const Divider(),
-          const ListTile(
-            title: Text('Mobile Developer'),
-            subtitle: Text('IOs, Android and Flutter'),
+          ListTile(
+            title:
+                Text("${user.profesion}", style: const TextStyle(fontSize: 18)),
+            subtitle: const Text('IOs, Android and Flutter'),
           ),
           const Text(
             'Skills',
             style: TextStyle(fontSize: 18),
           ),
           const Divider(),
-          const ListTile(
-            title: Text('Flutter'),
-            subtitle: Text('Flutter is a mobile application framework'),
-          ),
-          const ListTile(
-            title: Text('Dart'),
-            subtitle: Text('Dart is a programming language'),
-          ),
-          const ListTile(
-            title: Text('Kotlin'),
-            subtitle: Text('Kotlin is a programming language'),
-          ),
-          const ListTile(
-            title: Text('Swift'),
-            subtitle: Text('Swift is a programming language'),
+          ListTile(
+            title: Text("${user.skills?.join(', ')}",
+                style: const TextStyle(fontSize: 18)),
           ),
         ],
       ),

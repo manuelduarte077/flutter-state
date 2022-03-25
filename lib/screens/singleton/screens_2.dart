@@ -27,7 +27,8 @@ class Screen2 extends StatelessWidget {
               onPressed: () {
                 final newUser = User(
                   name: "Manuel Duarte",
-                  profesion: ["Desarrollador", "Diseñador"],
+                  userName: "manuelduarte077",
+                  profesion: "Mobile Developer",
                   skills: ["Flutter", "Dart", "Kotlin", "Swift"],
                 );
                 context.read<UsuariosCubit>().seleccionarUsuario(newUser);

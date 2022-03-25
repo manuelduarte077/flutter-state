@@ -25,7 +25,7 @@ class UsuarioInitial extends UsuarioState {
 //  cambiar el estado
 
 class UsuarioActivo extends UsuarioState {
-  final exusteUsuario = true;
+  final existeUsuario = true;
 
   final User user;
 
