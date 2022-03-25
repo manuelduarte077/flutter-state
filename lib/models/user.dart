@@ -1,11 +1,11 @@
 class User {
   final String name;
-  List<String> profesion;
-  List<String> skills;
+  List<String>? profesion;
+  List<String>? skills;
 
   User({
     required this.name,
-    required this.profesion,
-    required this.skills,
-  });
+    this.profesion,
+    this.skills,
+  }) : assert(name != null);
 }

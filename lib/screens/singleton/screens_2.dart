@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state/models/user.dart';
+import 'package:flutter_state/services/user_service.dart';
 
 class Screen2 extends StatelessWidget {
   const Screen2({Key? key}) : super(key: key);
@@ -18,7 +20,10 @@ class Screen2 extends StatelessWidget {
                 'Add user',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: () {},
+              onPressed: () {
+                final user = User(name: 'John Doe');
+                userService.getAllUser(user);
+              },
             ),
             MaterialButton(
               elevation: 0,

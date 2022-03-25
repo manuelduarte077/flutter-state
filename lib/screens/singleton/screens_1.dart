@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state/models/user.dart';
 import 'package:flutter_state/screens/singleton/screens_2.dart';
+import 'package:flutter_state/services/user_service.dart';
 
 class HomeScreen1 extends StatelessWidget {
   const HomeScreen1({Key? key}) : super(key: key);
@@ -7,7 +9,11 @@ class HomeScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserInfo(),
+      body: userService.existeUsuario
+          ? UserInformacion(usuario: userService.userInfo)
+          : const Center(
+              child: Text('Not user found'),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -23,7 +29,13 @@ class HomeScreen1 extends StatelessWidget {
   }
 }
 
-class UserInfo extends StatelessWidget {
+class UserInformacion extends StatelessWidget {
+  final User usuario;
+  const UserInformacion({
+    Key? key,
+    required this.usuario,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,46 +44,45 @@ class UserInfo extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
+        children: [
+          const Text(
             'General Information',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            title: Text('Name'),
-            subtitle: Text('John Doe'),
+            title: Text("Name: ${usuario.name}"),
           ),
-          Text(
+          const Text(
             'Profession',
             style: TextStyle(fontSize: 18),
           ),
-          Divider(),
-          ListTile(
+          const Divider(),
+          const ListTile(
             title: Text('Mobile Developer'),
             subtitle: Text('IOs, Android and Flutter'),
           ),
-          Text(
+          const Text(
             'Skills',
             style: TextStyle(fontSize: 18),
           ),
-          Divider(),
-          ListTile(
+          const Divider(),
+          const ListTile(
             title: Text('Flutter'),
             subtitle: Text('Flutter is a mobile application framework'),
           ),
-          ListTile(
+          const ListTile(
             title: Text('Dart'),
             subtitle: Text('Dart is a programming language'),
           ),
-          ListTile(
+          const ListTile(
             title: Text('Kotlin'),
             subtitle: Text('Kotlin is a programming language'),
           ),
-          ListTile(
+          const ListTile(
             title: Text('Swift'),
             subtitle: Text('Swift is a programming language'),
           ),
