@@ -9,6 +9,8 @@ class Screen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userCubit = context.read<UsuariosCubit>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Screen2'),
@@ -31,35 +33,30 @@ class Screen2 extends StatelessWidget {
                   profesion: "Mobile Developer",
                   skills: ["Flutter", "Dart", "Kotlin", "Swift"],
                 );
-                context.read<UsuariosCubit>().seleccionarUsuario(newUser);
+                userCubit.seleccionarUsuario(newUser);
               },
             ),
             MaterialButton(
               elevation: 0,
               color: Colors.indigo,
               child: const Text(
-                'Change Profession',
+                'Change UserName',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: () {},
+              onPressed: () {
+                userCubit.cambiarUserName("manuelduarte099");
+              },
             ),
             MaterialButton(
               elevation: 0,
               color: Colors.indigo,
               child: const Text(
-                'Add user',
+                'Add Skills',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: () {},
-            ),
-            MaterialButton(
-              elevation: 0,
-              color: Colors.indigo,
-              child: const Text(
-                'Skills',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {},
+              onPressed: () {
+                userCubit.agregarProfesion();
+              },
             ),
           ],
         ),

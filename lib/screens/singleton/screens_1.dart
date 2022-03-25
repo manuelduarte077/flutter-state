@@ -9,7 +9,17 @@ class HomeScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userCubit = context.read<UsuariosCubit>();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter State'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => userCubit.borrarUsuario(),
+          ),
+        ],
+      ),
       body: const BodyScaffold(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -108,8 +118,7 @@ class UserInformacion extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title:
-                Text("${user.profesion}", style: const TextStyle(fontSize: 18)),
+            title: Text(user.profesion, style: const TextStyle(fontSize: 18)),
             subtitle: const Text('IOs, Android and Flutter'),
           ),
           const Text(
@@ -117,10 +126,13 @@ class UserInformacion extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
           const Divider(),
-          ListTile(
-            title: Text("${user.skills?.join(', ')}",
-                style: const TextStyle(fontSize: 18)),
-          ),
+          ...user.skills
+              .map(
+                (skill) => ListTile(
+                  title: Text(skill, style: const TextStyle(fontSize: 18)),
+                ),
+              )
+              .toList()
         ],
       ),
     );

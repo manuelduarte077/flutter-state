@@ -14,4 +14,32 @@ class UsuariosCubit extends Cubit<UsuarioState> {
   void seleccionarUsuario(User user) {
     emit(UsuarioActivo(user)); // Cambiar el estado
   }
+
+  // Cambiar userName
+  void cambiarUserName(String userName) {
+    final currebtState = state;
+    if (currebtState is UsuarioActivo) {
+      final newUser = currebtState.user.copyWith(userName: "userName");
+      emit(UsuarioActivo(newUser));
+    }
+  }
+
+  //  Agregar una nueva profesion
+  void agregarProfesion() {
+    final currentState = state;
+    if (currentState is UsuarioActivo) {
+      final newSkills = [
+        ...currentState.user.skills,
+        "Skills: ${currentState.user.skills.length + 1}",
+      ];
+
+      final newUser = currentState.user.copyWith(skills: newSkills);
+      emit(UsuarioActivo(newUser));
+    }
+  }
+
+  // Borrar el usuario
+  void borrarUsuario() {
+    emit(UsuarioInitial());
+  }
 }
