@@ -14,4 +14,20 @@ abstract class UsuarioState {}
 // Estado inicial
 class UsuarioInitial extends UsuarioState {
   final existeUsuario = false;
+
+  // Sobre escribir el metodo toString
+  @override
+  String toString() {
+    return 'UsuarioInitial: existeUsuario: $existeUsuario';
+  }
+}
+
+//  cambiar el estado
+
+class UsuarioActivo extends UsuarioState {
+  final exusteUsuario = true;
+
+  final User user;
+
+  UsuarioActivo(this.user);
 }

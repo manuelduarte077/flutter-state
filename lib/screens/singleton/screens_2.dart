@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_state/models/user.dart';
-import 'package:flutter_state/services/user_service.dart';
+import 'package:flutter_state/screens/bloc/user/usuario_cubit.dart';
 
 class Screen2 extends StatelessWidget {
   const Screen2({Key? key}) : super(key: key);
@@ -16,13 +18,19 @@ class Screen2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MaterialButton(
+              elevation: 0,
+              color: Colors.indigo,
               child: const Text(
-                'Add user',
+                'Establecer usuario',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                final user = User(name: 'John Doe');
-                userService.getAllUser(user);
+                final newUser = User(
+                  name: "Manuel Duarte",
+                  profesion: ["Desarrollador", "Diseñador"],
+                  skills: ["Flutter", "Dart", "Kotlin", "Swift"],
+                );
+                context.read<UsuariosCubit>().seleccionarUsuario(newUser);
               },
             ),
             MaterialButton(

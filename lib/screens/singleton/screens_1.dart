@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_state/screens/bloc/user/usuario_cubit.dart';
 import 'package:flutter_state/screens/singleton/screens_2.dart';
 
 class HomeScreen1 extends StatelessWidget {
@@ -7,7 +9,19 @@ class HomeScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserInformacion(),
+      body: BlocBuilder<UsuariosCubit, UsuarioState>(
+        builder: (context, state) {
+          print('state: $state');
+
+          if (state is UsuarioInitial) {
+            return const Center(
+              child: Text('No hay usuario'),
+            );
+          } else {
+            return const UserInformacion();
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -45,7 +59,7 @@ class UserInformacion extends StatelessWidget {
             ),
           ),
           const Divider(),
-          ListTile(
+          const ListTile(
             title: Text("Name: Duarte"),
           ),
           const Text(
