@@ -5,8 +5,6 @@ class _UserService {
 
   User get userInfo => _userInfo;
 
-  final User _user = User(name: 'John Doe');
-
   // Para saber si el usuario esta logeado
   bool get existeUsuario => (_user != null);
 

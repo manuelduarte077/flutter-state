@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_state/screens/bloc/productos/productos_cubit.dart';
+import 'package:flutter_state/screens/bloc/user/usuario_cubit.dart';
 import 'package:flutter_state/screens/singleton/screens_1.dart';
 
 class MyApp extends StatelessWidget {
@@ -6,17 +9,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      title: 'Material App',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter Statett'),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UsuariosCubit>(
+          create: (context) => UsuariosCubit(),
         ),
-        body: const HomeScreen1(),
+        BlocProvider<ProductosCubit>(
+          create: (context) => ProductosCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const HomeScreen1(),
       ),
     );
   }

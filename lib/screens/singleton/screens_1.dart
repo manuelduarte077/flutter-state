@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_state/models/user.dart';
+import 'package:flutter_state/screens/bloc/user/usuario_cubit.dart';
 import 'package:flutter_state/screens/singleton/screens_2.dart';
-import 'package:flutter_state/services/user_service.dart';
 
 class HomeScreen1 extends StatelessWidget {
   const HomeScreen1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userCubit = context.read<UsuariosCubit>();
     return Scaffold(
-      body: userService.existeUsuario
-          ? UserInformacion(usuario: userService.userInfo)
-          : const Center(
-              child: Text('Not user found'),
-            ),
+      appBar: AppBar(
+        title: const Text('Flutter State'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => userCubit.borrarUsuario(),
+          ),
+        ],
+      ),
+      body: const BodyScaffold(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -29,11 +36,46 @@ class HomeScreen1 extends StatelessWidget {
   }
 }
 
-class UserInformacion extends StatelessWidget {
-  final User usuario;
-  const UserInformacion({
+class BodyScaffold extends StatelessWidget {
+  const BodyScaffold({
     Key? key,
-    required this.usuario,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UsuariosCubit, UsuarioState>(
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case UsuarioInitial:
+            return const Center(
+              child: Text(
+                'No hay información del usuario',
+                style: TextStyle(fontSize: 20),
+              ),
+            );
+            break;
+
+          case UsuarioActivo:
+            return UserInformacion(
+              user: (state as UsuarioActivo).user,
+            );
+            break;
+
+          default:
+            return const Center(
+              child: Text('No hay usuario'),
+            );
+        }
+      },
+    );
+  }
+}
+
+class UserInformacion extends StatelessWidget {
+  User user;
+  UserInformacion({
+    Key? key,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -45,6 +87,15 @@ class UserInformacion extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 30, top: 10),
+            child: Center(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage("https://picsum.photos/200/300"),
+                radius: 50,
+              ),
+            ),
+          ),
           const Text(
             'General Information',
             style: TextStyle(
@@ -54,38 +105,34 @@ class UserInformacion extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: Text("Name: ${usuario.name}"),
+            title: Text("Name: ${user.name}",
+                style: const TextStyle(fontSize: 18)),
+          ),
+          ListTile(
+            title: Text("User Name: ${user.userName}",
+                style: const TextStyle(fontSize: 18)),
           ),
           const Text(
             'Profession',
             style: TextStyle(fontSize: 18),
           ),
           const Divider(),
-          const ListTile(
-            title: Text('Mobile Developer'),
-            subtitle: Text('IOs, Android and Flutter'),
+          ListTile(
+            title: Text(user.profesion, style: const TextStyle(fontSize: 18)),
+            subtitle: const Text('IOs, Android and Flutter'),
           ),
           const Text(
             'Skills',
             style: TextStyle(fontSize: 18),
           ),
           const Divider(),
-          const ListTile(
-            title: Text('Flutter'),
-            subtitle: Text('Flutter is a mobile application framework'),
-          ),
-          const ListTile(
-            title: Text('Dart'),
-            subtitle: Text('Dart is a programming language'),
-          ),
-          const ListTile(
-            title: Text('Kotlin'),
-            subtitle: Text('Kotlin is a programming language'),
-          ),
-          const ListTile(
-            title: Text('Swift'),
-            subtitle: Text('Swift is a programming language'),
-          ),
+          ...user.skills
+              .map(
+                (skill) => ListTile(
+                  title: Text(skill, style: const TextStyle(fontSize: 18)),
+                ),
+              )
+              .toList()
         ],
       ),
     );
