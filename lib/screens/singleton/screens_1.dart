@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state/models/user.dart';
 import 'package:flutter_state/screens/singleton/screens_2.dart';
-import 'package:flutter_state/services/user_service.dart';
 
 class HomeScreen1 extends StatelessWidget {
   const HomeScreen1({Key? key}) : super(key: key);
@@ -9,11 +7,7 @@ class HomeScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: userService.existeUsuario
-          ? UserInformacion(usuario: userService.userInfo)
-          : const Center(
-              child: Text('Not user found'),
-            ),
+      body: UserInformacion(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -30,10 +24,8 @@ class HomeScreen1 extends StatelessWidget {
 }
 
 class UserInformacion extends StatelessWidget {
-  final User usuario;
   const UserInformacion({
     Key? key,
-    required this.usuario,
   }) : super(key: key);
 
   @override
@@ -54,7 +46,7 @@ class UserInformacion extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: Text("Name: ${usuario.name}"),
+            title: Text("Name: Duarte"),
           ),
           const Text(
             'Profession',
