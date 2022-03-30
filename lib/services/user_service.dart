@@ -6,7 +6,7 @@ class _UserService {
   User get userInfo => _userInfo;
 
   // Para saber si el usuario esta logeado
-  bool get existeUsuario => (_user != null);
+  bool get existeUsuario => (_userInfo != null);
 
   // Cargar el usuario
   void getAllUser(User usuario) {

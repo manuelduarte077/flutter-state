@@ -10,3 +10,13 @@ abstract class UserState {
     required this.user,
   });
 }
+
+class UserInitState extends UserState {
+  UserInitState() : super(existUser: false, user: null);
+}
+
+class UserSetState extends UserState {
+  final User userNew;
+
+  const UserSetState(this.userNew) : super(existUser: true, user: userNew);
+}
