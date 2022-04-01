@@ -1,13 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state/data.dart';
 
-class MainStateful extends StatelessWidget {
+class MyInheritedWidget extends InheritedWidget {
+  const MyInheritedWidget({
+    required Widget child,
+    required this.onThemeChanged,
+    Key? key,
+  }) : super(key: key, child: child);
+
+  // Crear un coolback para comunicar el widget con el resto de la aplicación
+  final VoidCallback onThemeChanged;
+
+// Creamos un metodo para poder acceder al MyInheritedWidget desde otro widget
+  static MyInheritedWidget of(BuildContext context) =>
+      context.findAncestorWidgetOfExactType<MyInheritedWidget>()!;
+
+  @override
+  bool updateShouldNotify(MyInheritedWidget oldWidget) => false;
+}
+
+class MainStateful extends StatefulWidget {
   const MainStateful({Key? key}) : super(key: key);
 
   @override
+  State<MainStateful> createState() => _MainStatefulState();
+}
+
+class _MainStatefulState extends State<MainStateful> {
+  bool isDark = true; // false = light, true = dark
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: const HomeStateFull(),
+    return MyInheritedWidget(
+      onThemeChanged: () {
+        setState(() {
+          isDark = !isDark;
+        });
+      },
+      child: MaterialApp(
+        // Cambiando el tema de la aplicación  (light/dark)
+        theme: isDark
+            ? ThemeData.dark()
+            : ThemeData.light(), // ThemeData.dark() is the default
+        home: const HomeStateFull(),
+      ),
     );
   }
 }
@@ -68,7 +104,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: const Text('Stateful'),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            MyInheritedWidget.of(context).onThemeChanged();
+          },
           icon: const Icon(Icons.light_mode),
         ),
       ],
@@ -89,6 +127,56 @@ class FutureStateful extends StatefulWidget {
 class _FutureStatefulState extends State<FutureStateful> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("FutureBuilder -  Stateful"),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.refresh_outlined),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const TextField(
+                decoration: InputDecoration(),
+              ),
+              FutureBuilder<List<String>>(
+                future: getCourses(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasData) {
+                      final data = snapshot.data!;
+                      return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: data.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(data[index]),
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: Text("No hay datos"),
+                      );
+                    }
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
