@@ -1,0 +1,16 @@
+targets:
+  $default:
+    builders:
+      graphql_codegen:
+        options:
+          scalars:
+            URL:
+              type: String
+            ISODateTime:
+              type: DateTime
+              fromJsonFunctionName: dateTimeFromJson
+              toJsonFunctionName: dateTimeToJson
+              import: package:graphql_codegen_example/scalars.dart
+          clients:
+            - graphql
+            - graphql_flutter
